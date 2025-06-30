@@ -41,7 +41,7 @@ renderWithTheme(ui: ReactNode, options?: {
 
 ---
 
-## ✨ Basic Example (without `screen`)
+## ✨ Basic Example 
 
 ```tsx
 import { renderWithTheme } from '@testing/renderWithTheme';
@@ -73,33 +73,6 @@ describe('<MyComponent />', () => {
     renderWithTheme(<MyComponent />);
     expect(screen.getByText('Hello world')).toBeInTheDocument();
   });
-});
-```
-
----
-
-## 🌓 Dynamic Mode Switching (Simulated)
-
-By default, `setMode` is a no-op.
-If you want to simulate switching themes dynamically, you can mock it in your test:
-
-```tsx
-import { render } from '@testing-library/react';
-import { ThemeContext } from 'src/style-library/providers/ThemeProvider';
-import { ThemeProvider as MUIThemeProvider } from '@mui/material/styles';
-import { lightTheme, darkTheme } from 'src/style-library/themes/default';
-import MyComponent from './MyComponent';
-
-it('renders with dynamic mode', () => {
-  const setModeMock = jest.fn();
-  const Wrapper = ({ children }) => (
-    <ThemeContext.Provider value={{ mode: 'dark', setMode: setModeMock }}>
-      <MUIThemeProvider theme={darkTheme}>{children}</MUIThemeProvider>
-    </ThemeContext.Provider>
-  );
-
-  const { getByText } = render(<MyComponent />, { wrapper: Wrapper });
-  expect(getByText('Hello world')).toBeInTheDocument();
 });
 ```
 
@@ -141,11 +114,7 @@ src/test-utils/setupTest.tsx
 ## ✅ Full Example
 
 ```tsx
-import {
-  renderWithTheme,
-  screen,
-  fireEvent
-} from '@testing/renderWithTheme';
+import { renderWithTheme, screen, fireEvent } from '@testing/renderWithTheme';
 import Button from './Button';
 
 describe('<Button />', () => {
@@ -167,17 +136,3 @@ describe('<Button />', () => {
   });
 });
 ```
-
----
-
-## 🏁 Conclusion
-
-This helper is designed to make your tests consistent, maintainable, and ready for any scenario using either light or dark themes.
-
-If you have questions or suggestions for improvements, see:
-
-```
-src/test-utils/setupTest.tsx
-```
-
-or open a PR with your proposal.
