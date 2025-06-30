@@ -19,7 +19,7 @@ To avoid duplicating setup code in every test and ensure consistency, `renderWit
 
 - ✅ Wraps [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) `render`.
 - ✅ Allows selecting the theme mode (`light` or `dark`).
-- ✅ Re-exports all Testing Library utilities (`screen`, `fireEvent`, `userEvent`, etc.).
+- ✅ Re-exports all Testing Library utilities (`fireEvent`, `screen`, `userEvent`, etc.).
 - ✅ Defaults to `light` mode when none is specified.
 
 ---
@@ -33,28 +33,44 @@ renderWithTheme(ui: ReactNode, options?: {
 }): RenderResult
 ```
 
-| Parameter   | Description                                        |
-|-------------|----------------------------------------------------|
-| `ui`        | The React component to render.                    |
-| `mode`      | Theme mode to use (`light` or `dark`). Defaults to `light`. |
-| `RenderOptions` | All the standard options from `@testing-library/react`. |
+| Parameter     | Description                                                         |
+|---------------|---------------------------------------------------------------------|
+| `ui`          | The React component to render.                                     |
+| `mode`        | Theme mode to use (`light` or `dark`). Defaults to `light`.        |
+| `RenderOptions` | All the standard options from `@testing-library/react`.         |
 
 ---
 
-## ✨ Basic Example
+## ✨ Basic Example (without `screen`)
+
+```tsx
+import { renderWithTheme } from '@testing/renderWithTheme';
+import MyComponent from './MyComponent';
+
+describe('<MyComponent />', () => {
+  it('renders correctly in light mode', () => {
+    const { getByText } = renderWithTheme(<MyComponent />);
+    expect(getByText('Hello world')).toBeInTheDocument();
+  });
+
+  it('renders correctly in dark mode', () => {
+    const { getByText } = renderWithTheme(<MyComponent />, { mode: 'dark' });
+    expect(getByText('Hello world')).toBeInTheDocument();
+  });
+});
+```
+
+---
+
+## 🔍 Example Using `screen`
 
 ```tsx
 import { renderWithTheme, screen } from '@testing/renderWithTheme';
 import MyComponent from './MyComponent';
 
 describe('<MyComponent />', () => {
-  it('renders correctly in light mode', () => {
+  it('renders content using screen', () => {
     renderWithTheme(<MyComponent />);
-    expect(screen.getByText('Hello world')).toBeInTheDocument();
-  });
-
-  it('renders correctly in dark mode', () => {
-    renderWithTheme(<MyComponent />, { mode: 'dark' });
     expect(screen.getByText('Hello world')).toBeInTheDocument();
   });
 });
@@ -94,14 +110,7 @@ it('renders with dynamic mode', () => {
 You can import all `@testing-library/react` utilities directly from this module:
 
 ```ts
-import {
-  renderWithTheme,
-  screen,
-  fireEvent,
-  userEvent,
-  waitFor,
-  within
-} from '@testing/renderWithTheme';
+import { renderWithTheme, screen, fireEvent, userEvent, waitFor, within } from '@testing/renderWithTheme';
 ```
 
 This helps keep your imports clean and centralized.
@@ -111,7 +120,7 @@ This helps keep your imports clean and centralized.
 ## 📝 Recommendations
 
 - ✅ Use `screen` for consistent and accessible queries.
-- ✅ If your component requires dark mode, specify it explicitly:
+- ✅ If your component depends on dark mode, specify it explicitly:
 
   ```tsx
   renderWithTheme(<MyComponent />, { mode: 'dark' });
