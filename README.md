@@ -106,7 +106,7 @@ This helps keep your imports clean and centralized.
 ## 🧩 File Location
 
 ```
-src/test-utils/setupTest.tsx
+src/testUtils/renderWithTheme.tsx
 ```
 
 ---
